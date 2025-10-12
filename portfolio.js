@@ -148,10 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// Typing animation for hero title - REMOVED
-// The hero title now displays normally without typing animation
-
 // Alternating typing animation for subtitle
 document.addEventListener('DOMContentLoaded', function() {
     const typingElement = document.getElementById('typing-text');
@@ -281,33 +277,6 @@ function SkillProgressBar({ skill, percentage }) {
 }
 
 
-// Theme Toggle Component
-function ThemeToggle() {
-    const [isDark, setIsDark] = useState(false);
-    
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setIsDark(savedTheme === 'dark');
-            document.body.classList.toggle('dark-theme', savedTheme === 'dark');
-        }
-    }, []);
-    
-    const toggleTheme = () => {
-        const newTheme = !isDark;
-        setIsDark(newTheme);
-        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-        document.body.classList.toggle('dark-theme', newTheme);
-    };
-    
-    return React.createElement('button', {
-        className: 'theme-toggle',
-        onClick: toggleTheme,
-        'aria-label': 'Toggle theme'
-    }, React.createElement('i', {
-        className: isDark ? 'fas fa-sun' : 'fas fa-moon'
-    }));
-}
 
 // Initialize React components
 document.addEventListener('DOMContentLoaded', function() {
