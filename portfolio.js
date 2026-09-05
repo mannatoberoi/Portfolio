@@ -31,21 +31,20 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Scroll indicator
-window.addEventListener('scroll', function() {
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    if (!scrollIndicator) {
-        const indicator = document.createElement('div');
-        indicator.className = 'scroll-indicator';
-        document.body.appendChild(indicator);
-    }
-    
+// Scroll indicator and lightweight scroll choreography
+const scrollIndicator = document.createElement('div');
+scrollIndicator.className = 'scroll-indicator';
+document.body.appendChild(scrollIndicator);
+
+function updateScrollProgress() {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (winScroll / height) * 100;
-    
-    document.querySelector('.scroll-indicator').style.transform = `scaleX(${scrolled / 100})`;
-});
+    scrollIndicator.style.transform = `scaleX(${Math.min(scrolled / 100, 1)})`;
+}
+
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+updateScrollProgress();
 
 // Intersection Observer for animations
 const observerOptions = {
@@ -57,15 +56,19 @@ const observer = new IntersectionObserver(function(entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
         }
     });
 }, observerOptions);
 
 // Add animation classes to elements
 document.addEventListener('DOMContentLoaded', function() {
-    const animatedElements = document.querySelectorAll('.skill-category, .stat-item, .education-item');
+    const animatedElements = document.querySelectorAll(
+        '.section-title, .about-text, .skill-category, .stat-item, .education-item, .contact-info'
+    );
     animatedElements.forEach(el => {
-        el.classList.add('fade-in');
+        el.classList.add('reveal-on-scroll');
         observer.observe(el);
     });
 });
@@ -190,15 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Start typing animation immediately since hero title has no typing
         setTimeout(typeText, 1000);
-    }
-});
-
-// Parallax effect for hero section
-window.addEventListener('scroll', function() {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
     }
 });
 
